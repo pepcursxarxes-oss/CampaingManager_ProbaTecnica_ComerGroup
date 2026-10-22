@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories
     {
         public Task AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-             await context.Set<T>().AddAsync(entity, cancellationToken);
+             return context.Set<T>().AddAsync(entity, cancellationToken).AsTask();
         }
 
         public Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
