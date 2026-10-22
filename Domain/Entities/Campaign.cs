@@ -30,7 +30,7 @@ namespace Domain.Entities
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(pressupostTotal),
-                    "El pressupost total ha de ser estrictament positiu.");
+                    "El pressupost total ha de ser positiu.");
             }
 
             Id = Guid.NewGuid();
@@ -42,5 +42,55 @@ namespace Domain.Entities
             Estat = EstatCampanya.ESBORRANY;
         }
 
+        public void Activar(DateTimeOffset ara)
+        {
+            if (Estat == EstatCampanya.FINALITZADA)
+                throw new InvalidOperationException(
+                    "Una campanya finalitzada no es pot reactivar.");
+
+            if (ara >= DataFi)
+                throw new InvalidOperationException(
+                    "No es pot activar una campanya caducada.");
+
+            if (PressupostConsumit >= PressupostTotal)
+                throw new InvalidOperationException(
+                    "No queda pressupost disponible.");
+
+            Estat = EstatCampanya.ACTIVA;
+        }
+
+        public void Pausar()
+        {
+            if (Estat == EstatCampanya.FINALITZADA)
+                throw new InvalidOperationException(
+                    "Una campanya finalitzada no es pot modificar.");
+
+            Estat = EstatCampanya.PAUSADA;
+        }
+
+        public void Consumir(decimal import, DateTimeOffset ara)
+        {
+            if (import <= 0)
+                throw new ArgumentOutOfRangeException(
+                    nameof(import),
+                    "L'import ha de ser positiu.");
+
+            if (Estat != EstatCampanya.ACTIVA)
+                throw new InvalidOperationException(
+                    "Només es pot consumir pressupost d'una campanya activa.");
+
+            if (ara < DataInici || ara > DataFi)
+                throw new InvalidOperationException(
+                    "La campanya no es troba dins del període de vigència.");
+
+            if (import > PressupostTotal - PressupostConsumit)
+                throw new InvalidOperationException(
+                    "El consum supera el pressupost disponible.");
+
+            PressupostConsumit += import;
+
+            if (PressupostConsumit == PressupostTotal)
+                Estat = EstatCampanya.FINALITZADA;
+        }
     }
 }

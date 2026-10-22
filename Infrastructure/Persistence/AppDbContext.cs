@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Application.Interfaces;
 
 namespace Infrastructure.Persistence
 {
-    public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
     {
         public DbSet<Campanya> Campanyes => Set<Campanya>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)

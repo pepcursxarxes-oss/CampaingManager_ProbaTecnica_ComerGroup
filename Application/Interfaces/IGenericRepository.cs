@@ -1,13 +1,19 @@
-﻿namespace Application.Interfaces
+﻿namespace Application.Interfaces;
+
+public interface IGenericRepository<TEntity> where TEntity : class
 {
-    public interface IGenericRepository<T> where T: class 
-    {
-        Task AddAsync(
-            T entity, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
 
-        Task<T?> GetByIdAsync(
-            Guid id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<TEntity>> GetAllAsync(
+        CancellationToken cancellationToken = default);
 
-        Task SaveAsync(CancellationToken cancellationToken = default);
-    }
+    Task AddAsync(
+        TEntity entity,
+        CancellationToken cancellationToken = default);
+
+    void Update(TEntity entity);
+
+    void Remove(TEntity entity);
 }

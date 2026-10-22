@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped(
     typeof(IGenericRepository<>),
     typeof(GenericRepository<>));
+
+// Servei d'aplicació
+builder.Services.AddScoped<ICampanyaService, CampanyaService>();
+
+// Proveïdor de temps
+builder.Services.AddSingleton(TimeProvider.System);
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
