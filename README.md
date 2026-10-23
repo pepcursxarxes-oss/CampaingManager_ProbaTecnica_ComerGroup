@@ -8,6 +8,7 @@ Sistema de gestió de campanyes de màrqueting i control de pressupost, desenvol
 
 A la carpeta [`docs/`](./docs/) trobareu documentació monogràfica addicional:
 
+- **[Guia d'Ús i Manual de Proves (`docs/GUIA_D_US_I_PROVES.md`)](./docs/GUIA_D_US_I_PROVES.md)**: Manual pas a pas per provar tot el sistema des de la interfície visual d'Angular o mitjançant comandes d'API (cURL, PowerShell i fitxer `.http`), amb taula checklist de verificació.
 - **[Estat del Projecte: Abans i Després (`docs/ESTAT_ABANS_I_DESPRES.md`)](./docs/ESTAT_ABANS_I_DESPRES.md)**: Comparativa exhaustiva i taula d'auditoria de l'estat del repositori abans i després de les correccions aplicades.
 - **[Arquitectura del Sistema (`docs/ARQUITECTURA.md`)](./docs/ARQUITECTURA.md)**: Detall complet de les capes del backend (Domain, Application, Infrastructure, CampaignApi), flux de dades, diagrames Mermaid, patrons utilitzats i frontend Angular.
 - **[Millores Futures i Reflexió d'Enginyeria (`docs/MILLORES_I_REFLEXIO.md`)](./docs/MILLORES_I_REFLEXIO.md)**: Propostes d'escalabilitat productiva (concurrència optimista, CQRS/Domain Events, paginació, observabilitat) i **nota personal/professional del desenvolupador** sobre el balanç entre sobre-enginyeria, escalabilitat i ús transparent d'IA.
@@ -102,6 +103,7 @@ El projecte està estructurat seguint els principis d'**Arquitectura Neta** (Cle
 ```text
 MarketingCampaignsManager/
 ├── docs/                       # Documentació addicional d'arquitectura i reflexió
+│   ├── GUIA_D_US_I_PROVES.md   # Manual pas a pas per provar tot el sistema
 │   ├── ESTAT_ABANS_I_DESPRES.md # Comparativa d'auditoria abans i després
 │   ├── ARQUITECTURA.md         # Detall exhaustiu de patrons, capes i diagrames
 │   └── MILLORES_I_REFLEXIO.md  # Millores productives i nota professional de l'autor
@@ -117,6 +119,7 @@ MarketingCampaignsManager/
 │   └── Repositories/           # GenericRepository i UnitOfWork
 ├── CampaignApi/                # Presentació / API REST ASP.NET Core
 │   ├── Controllers/            # CampaignsController (exposició dels endpoints)
+│   ├── CampaignApi.http        # Fitxer de proves de peticions HTTP directes
 │   └── Program.cs              # Configuració de DI, CORS, JSON converters i migració
 ├── CampaignManager.Tests/      # Bateria de proves automatitzades .NET (xUnit)
 │   ├── Domain/Entities/        # Tests unitaris de les invariables de Campanya
@@ -211,3 +214,5 @@ Durant la realització d'aquesta auditoria i finalització de la prova tècnica,
    - Petició de generació de documents monogràfics sobre l'arquitectura creada, millores futures i nota professional/personal de l'autor sobre el balanç de sobre-enginyeria vs. escalabilitat i ús transparent d'IA.
 4. **Prompt de documentació comparativa abans/després:**
    - Petició de generació d'un document amb el detall comparatiu de l'estat del projecte abans i després de les modificacions aplicades.
+5. **Prompt de guia d'ús i proves:**
+   - Petició de generació d'un manual d'ús del programari per provar tot el sistema (UI i API) i la seva incorporació a la solució `.slnx`.

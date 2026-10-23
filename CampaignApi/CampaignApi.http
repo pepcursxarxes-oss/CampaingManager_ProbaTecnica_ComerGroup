@@ -1,6 +1,92 @@
 @CampaignApi_HostAddress = http://localhost:5101
 
-GET {{CampaignApi_HostAddress}}/weatherforecast/
+### 1. Llistar totes les campanyes
+GET {{CampaignApi_HostAddress}}/campaigns
 Accept: application/json
 
-###
+### 2. Filtrar campanyes per estat ACTIVA
+GET {{CampaignApi_HostAddress}}/campaigns?estat=ACTIVA
+Accept: application/json
+
+### 3. Filtrar per estat invàlid (retorna 400 Bad Request)
+GET {{CampaignApi_HostAddress}}/campaigns?estat=99
+Accept: application/json
+
+### 4. Crear una nova campanya (retorna 201 Created amb header Location i { "id": "..." })
+# @name crearCampanya
+POST {{CampaignApi_HostAddress}}/campaigns
+Content-Type: application/json
+
+{
+  "nom": "Campanya Prova HTTP",
+  "pressupostTotal": 500,
+  "dataInici": "2026-10-01T00:00:00Z",
+  "dataFi": "2026-11-30T00:00:00Z"
+}
+
+### Obtenir l'ID de la campanya creada
+@campanyaId = {{crearCampanya.response.body.id}}
+
+### 5. Consultar la campanya creada per ID
+GET {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}
+Accept: application/json
+
+### 6. Activar la campanya (retorna 204 NoContent)
+PATCH {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/status
+Content-Type: application/json
+
+{
+  "estat": "ACTIVA"
+}
+
+### 7. Pausar la campanya (retorna 204 NoContent)
+PATCH {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/status
+Content-Type: application/json
+
+{
+  "estat": "PAUSADA"
+}
+
+### 8. Reprendre la campanya (retorna 204 NoContent)
+PATCH {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/status
+Content-Type: application/json
+
+{
+  "estat": "ACTIVA"
+}
+
+### 9. Intentar finalitzar manualment (retorna 400 Bad Request: operació no permesa)
+PATCH {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/status
+Content-Type: application/json
+
+{
+  "estat": "FINALITZADA"
+}
+
+### 10. Registrar consum parcial (retorna 204 NoContent)
+POST {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/consume
+Content-Type: application/json
+
+{
+  "import": 200
+}
+
+### 11. Registrar consum final que esgota el pressupost (passa automàticament a FINALITZADA)
+POST {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/consume
+Content-Type: application/json
+
+{
+  "import": 300
+}
+
+### 12. Verificar que l'estat és FINALITZADA i el consum és 500
+GET {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}
+Accept: application/json
+
+### 13. Intentar reactivar una campanya finalitzada (retorna 409 Conflict)
+PATCH {{CampaignApi_HostAddress}}/campaigns/{{campanyaId}}/status
+Content-Type: application/json
+
+{
+  "estat": "ACTIVA"
+}

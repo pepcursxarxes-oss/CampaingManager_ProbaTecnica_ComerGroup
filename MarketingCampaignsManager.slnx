@@ -5,7 +5,9 @@
   <Folder Name="/docs/">
     <File Path="docs/ARQUITECTURA.md" />
     <File Path="docs/ESTAT_ABANS_I_DESPRES.md" />
+    <File Path="docs/GUIA_D_US_I_PROVES.md" />
     <File Path="docs/MILLORES_I_REFLEXIO.md" />
+    <File Path="docs/pla_finalitzacio_campaignmanager.md" />
   </Folder>
   <Project Path="Application/Application.csproj" />
   <Project Path="CampaignApi/CampaignApi.csproj" />
