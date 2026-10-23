@@ -15,22 +15,29 @@ public sealed class CampaignsController : ControllerBase
         _service = service;
     }
 
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Crear([FromBody]CrearCampanyaDTO dto, CancellationToken cancellationToken) 
+    public async Task<IActionResult> Crear(
+        [FromBody] CrearCampanyaDTO dto,
+        CancellationToken cancellationToken)
     {
-        try 
+        try
         {
-            var id = _service.CrearAsync(dto, cancellationToken);
+            var id = await _service.CrearAsync(dto, cancellationToken);
 
-            return CreatedAtAction(nameof(ObtenirPerId), new { id }, new { id });
+            return CreatedAtAction(
+                nameof(ObtenirPerId),
+                new { id },
+                new { id });
         }
-        catch (Exception ex) 
+        catch (ArgumentException ex)
         {
             return BadRequest(new { error = ex.Message });
         }
     }
+
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,7 +48,7 @@ public sealed class CampaignsController : ControllerBase
         return Ok(campanyes);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CampanyaDTO>> ObtenirPerId(Guid id, CancellationToken cancellationToken)
@@ -116,9 +123,4 @@ public sealed class CampaignsController : ControllerBase
             return Conflict(new { error = ex.Message });
         }
     }
-
-
-
-
-
-    }
+}

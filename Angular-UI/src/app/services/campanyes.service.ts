@@ -34,7 +34,7 @@ export interface ConsumirPressupost {
 })
 export class CampanyesService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:5101/campaigns';
+  private readonly apiUrl = 'https://localhost:7128/campaigns';
 
   llistar(): Observable<Campanya[]> {
     return this.http.get<Campanya[]>(this.apiUrl);
