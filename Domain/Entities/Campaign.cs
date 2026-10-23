@@ -32,9 +32,15 @@ namespace Domain.Entities
                     nameof(pressupostTotal),
                     "El pressupost total ha de ser positiu.");
             }
+            if (dataFi <= dataInici)
+            {
+                throw new ArgumentException(
+                    "La data de fi ha de ser posterior a la data d'inici.",
+                    nameof(dataFi));
+            }
 
             Id = Guid.NewGuid();
-            Nom = nom;
+            Nom = nom.Trim();
             PressupostTotal = pressupostTotal;
             PressupostConsumit = 0;
             DataInici = dataInici;
