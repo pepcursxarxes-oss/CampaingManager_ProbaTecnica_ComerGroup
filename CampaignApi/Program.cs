@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Persistence;
@@ -18,8 +19,12 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -40,6 +45,13 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
+
+// Assegura la creació i migració de la base de dades
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

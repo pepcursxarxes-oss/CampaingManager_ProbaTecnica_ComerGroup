@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Domain.Enums;
@@ -70,6 +70,10 @@ namespace Domain.Entities
             if (Estat == EstatCampanya.FINALITZADA)
                 throw new InvalidOperationException(
                     "Una campanya finalitzada no es pot modificar.");
+
+            if (Estat != EstatCampanya.ACTIVA)
+                throw new InvalidOperationException(
+                    "Només es pot pausar una campanya activa.");
 
             Estat = EstatCampanya.PAUSADA;
         }

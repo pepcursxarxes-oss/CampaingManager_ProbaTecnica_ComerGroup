@@ -1,4 +1,3 @@
-
 import {
   Component,
   OnInit,
@@ -252,12 +251,12 @@ export class App implements OnInit {
   ): boolean {
     const transicions: Record<EstatCampanya, EstatCampanya[]> = {
       ESBORRANY: ['ACTIVA'],
-      ACTIVA: ['PAUSADA', 'FINALITZADA'],
-      PAUSADA: ['ACTIVA', 'FINALITZADA'],
+      ACTIVA: ['PAUSADA'],
+      PAUSADA: ['ACTIVA'],
       FINALITZADA: []
     };
 
-    return transicions[actual].includes(nou);
+    return transicions[actual]?.includes(nou) ?? false;
   }
 
   private estatApi(estat: EstatCampanya): number {

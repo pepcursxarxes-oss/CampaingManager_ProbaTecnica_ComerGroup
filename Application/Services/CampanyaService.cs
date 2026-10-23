@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
@@ -59,6 +59,13 @@ public sealed class CampanyaService : ICampanyaService
         EstatCampanya? estat = null,
         CancellationToken cancellationToken = default)
     {
+        if (estat.HasValue && !Enum.IsDefined(estat.Value))
+        {
+            throw new ArgumentException(
+                "L'estat especificat no és vàlid.",
+                nameof(estat));
+        }
+
         var campanyes = await _repository.GetAllAsync(
             cancellationToken);
 

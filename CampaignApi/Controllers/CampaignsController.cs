@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Application.DTOs;
 using Application.Interfaces;
 using Domain.Enums;
@@ -10,11 +10,11 @@ namespace CampaignApi.Controllers;
 public sealed class CampaignsController : ControllerBase
 {
     private readonly ICampanyaService _service;
-    public CampaignsController(ICampanyaService service )
+
+    public CampaignsController(ICampanyaService service)
     {
         _service = service;
     }
-
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -38,27 +38,38 @@ public sealed class CampaignsController : ControllerBase
         }
     }
 
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<CampanyaDTO>>> Llistar([FromQuery] EstatCampanya? estat, CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IReadOnlyList<CampanyaDTO>>> Llistar(
+        [FromQuery] EstatCampanya? estat,
+        CancellationToken cancellationToken)
     {
-        var campanyes = await _service.LlistarAsync(estat, cancellationToken);
-
-        return Ok(campanyes);
+        try
+        {
+            var campanyes = await _service.LlistarAsync(estat, cancellationToken);
+            return Ok(campanyes);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CampanyaDTO>> ObtenirPerId(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult<CampanyaDTO>> ObtenirPerId(
+        Guid id,
+        CancellationToken cancellationToken)
     { 
         var campanya = await _service.ObtenirPerIdAsync(id, cancellationToken);
 
         if (campanya == null) 
         {
-            return NotFound(new { error = $"No s'ha trobat la campanya {id}"});
+            return NotFound(new { error = $"No s'ha trobat la campanya {id}" });
         }
+
         return Ok(campanya);
     }
 
